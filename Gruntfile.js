@@ -8,13 +8,13 @@ module.exports = function (grunt) {
                 ]
             },
             files: {
-               "./dist/app.js": ["./src/parle.js"]
+               "./dist/app.js": ["./lib/parle.js"]
             }
          }
       },
       watch: {
          scripts: {
-            files: ["./src/*.js"],
+            files: ["./lib/*.js"],
             tasks: ["browserify"]
          }
       }
