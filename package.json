@@ -27,5 +27,8 @@
   },
   "scripts": {
     "test": "mocha test --compilers js:babel-core/register"
+  },
+  "dependencies": {
+    "parle-js": "github:pawel-kuznik/parle-js"
   }
 }
