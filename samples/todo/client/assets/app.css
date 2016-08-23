@@ -1,0 +1,99 @@
+
+body, html
+{
+    margin: 0;
+    padding: 0;
+}
+
+html
+{
+    background-color: #ccc;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+body 
+{
+    max-width: 30rem;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+
+    border-radius: .3rem;
+}
+
+.add-todo textarea,
+.add-todo button
+{
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.todo
+{
+    border-bottom: .1em solid #ddd;
+    padding: 1rem;
+
+    position: relative;
+
+    padding-right: 11rem;
+}
+
+.todo .done
+{
+    display: block;
+    width: 5rem;
+    padding: 1rem;
+    box-sizing: border-box;
+    position: absolute;
+
+    right: 0;
+    top: 0;
+
+    background-color: #fefefe;
+
+    transition: background-color .4s;
+
+    text-align: center;
+
+    cursor: pointer;
+}
+
+.todo .done:hover
+{
+
+    background-color: #eee;
+}
+
+header
+{
+    padding: 1rem;
+
+    border-bottom: .5rem dashed #eee;
+}
+
+header a
+{
+    text-decoration: none;
+}
+
+header a:hover
+{
+    text-decoration: none;
+}
+
+textarea
+{
+    padding: 1rem;
+    box-sizing: border-box;
+    border: none;
+    resize: none;
+
+    height: 10rem;
+}
+
+textarea:focus
+{
+    outline: none;
+}

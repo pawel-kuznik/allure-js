@@ -19,15 +19,13 @@ class AddTodo extends View {
 
     render() {
 
-        var header = document.createElement('HEADER');
-
-        this.$el.appendChild(header);
 
         var form = document.createElement('FORM');
 
         this.$el.appendChild(form);
 
         var textarea = document.createElement('TEXTAREA');
+        textarea.placeholder = "Type your todo here...";
 
         form.appendChild(textarea);
 
@@ -45,9 +43,10 @@ class AddTodo extends View {
                 content: textarea.value
             }));
 
-            window.location.hash = '/list';
-        });
+            this.trigger('todo-added');
 
+            window.location.hash = '/list';
+        }.bind(this));
     }
 }
 
@@ -77,7 +76,12 @@ class List extends View {
             list.appendChild(todoView.$el);
 
             todoView.render();
-        });
+
+            todoView.on('remove', function () {
+                this.trigger('todo-removed');
+            }.bind(this));
+
+        }.bind(this));
     }
 }
 
@@ -110,7 +114,6 @@ class TodoView extends View {
             this.destroy();
         }.bind(this));
     }
-
 }
 
 window.addEventListener('load', function () {
@@ -132,6 +135,9 @@ window.addEventListener('load', function () {
     content.className = 'content';
     document.querySelector('body').appendChild(content);
 
+    var counter = document.createElement('SPAN');
+    header.appendChild(counter);
+
 
     var router = new Router();
 
@@ -150,6 +156,11 @@ window.addEventListener('load', function () {
         document.querySelector('.content').appendChild(current.$el);
 
         current.render();
+
+        current.on('todo-removed', function () {
+
+            counter.textContent = parseInt(counter.textContent) - 1;
+        });
     });
 
     router.append('/add', function () {
@@ -163,7 +174,11 @@ window.addEventListener('load', function () {
         document.querySelector('.content').appendChild(current.$el);
 
         current.render();
-    });
 
+        current.on('todo-added', function () {
+
+            counter.textContent = parseInt(counter.textContent) + 1;
+        });
+    });
 });
 
