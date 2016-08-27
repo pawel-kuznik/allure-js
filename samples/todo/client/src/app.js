@@ -1,10 +1,22 @@
-import { View, Router, Collection, Model } from '../../../../lib/allure'
+import { View, Router, Collection, Model, WebStorage } from '../../../../lib/allure'
 
+/**
+ *  The ToDo model
+ */
 class Todo extends Model {
 
+    /**
+     *  Return the storage prefix for this model.
+     */
+    storagePrefix() {
+        return 'todo-';
+    }
 }
 
-var todos = new Collection(Todo);
+var todos = new Collection(Todo),
+    storage = new WebStorage(window.localStorage);
+
+storage.fetch(todos);
 
 class AddTodo extends View {
 
@@ -18,7 +30,6 @@ class AddTodo extends View {
     }
 
     render() {
-
 
         var form = document.createElement('FORM');
 
@@ -42,6 +53,8 @@ class AddTodo extends View {
             todos.append(new Todo({ 
                 content: textarea.value
             }));
+
+            storage.store(todos);
 
             this.trigger('todo-added');
 
@@ -110,6 +123,8 @@ class TodoView extends View {
         remove.addEventListener('click', function () {
 
             todos.remove(this.model);
+
+            storage.remove(this.model);
 
             this.destroy();
         }.bind(this));
