@@ -1,4 +1,4 @@
-import { View, Router, Collection, Model, WebStorage } from '../../../../lib/allure'
+import { View, Router, Collection, Model, WebStorage, RestStorage } from '../../../../lib/allure'
 
 /**
  *  The ToDo model
@@ -11,12 +11,20 @@ class Todo extends Model {
     storagePrefix() {
         return 'todo-';
     }
+
+    /**
+     *  Return the REST api prefix for the model.
+     */
+    restPrefix() {
+        return '/todo/';
+    }
 }
 
 var todos = new Collection(Todo),
-    storage = new WebStorage(window.localStorage);
+    // storage = new WebStorage(window.localStorage);
+    storage = new RestStorage();
 
-storage.fetch(todos);
+var storagePromise = storage.fetch(todos);
 
 class AddTodo extends View {
 
@@ -122,9 +130,9 @@ class TodoView extends View {
 
         remove.addEventListener('click', function () {
 
-            todos.remove(this.model);
-
             storage.remove(this.model);
+
+            todos.remove(this.model);
 
             this.destroy();
         }.bind(this));
@@ -156,11 +164,11 @@ window.addEventListener('load', function () {
 
     var router = new Router();
 
-    router.init();
-
     var current;
 
     router.append('/list', function () {
+
+        console.log('init list');
 
         if (current) current.destroy();
 
@@ -170,11 +178,14 @@ window.addEventListener('load', function () {
 
         document.querySelector('.content').appendChild(current.$el);
 
-        current.render();
+        storagePromise.then(function () {
 
-        current.on('todo-removed', function () {
+            current.render();
 
-            counter.textContent = parseInt(counter.textContent) - 1;
+            current.on('todo-removed', function () {
+
+                counter.textContent = parseInt(counter.textContent) - 1;
+            });
         });
     });
 
@@ -195,5 +206,7 @@ window.addEventListener('load', function () {
             counter.textContent = parseInt(counter.textContent) + 1;
         });
     });
+
+    router.init();
 });
 
